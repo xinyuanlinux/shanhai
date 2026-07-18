@@ -110,6 +110,17 @@
     canvas.addEventListener("pointerleave", () => pointer = { x: -999, y: -999 });
   }
 
+  const imageFallback = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 800'%3E%3Cdefs%3E%3ClinearGradient id='sky' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop stop-color='%231b2637'/%3E%3Cstop offset='1' stop-color='%23090c13'/%3E%3C/linearGradient%3E%3ClinearGradient id='mist' x1='0' y1='0' x2='1' y2='0'%3E%3Cstop stop-color='%23b8d1cf' stop-opacity='.36'/%3E%3Cstop offset='1' stop-color='%23cfb078' stop-opacity='.12'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='1200' height='800' fill='url(%23sky)'/%3E%3Ccircle cx='875' cy='192' r='82' fill='%23f1e7c8' opacity='.82'/%3E%3Cpath d='M0 570L220 350l152 151 175-245 181 231 166-135 306 218v230H0z' fill='%23101722'/%3E%3Cpath d='M0 626l258-157 146 108 181-143 185 150 184-83 246 144v155H0z' fill='%23161d2b'/%3E%3Cpath d='M0 667c247-80 446 19 659-29 212-47 369 24 541-38v200H0z' fill='url(%23mist)'/%3E%3C/svg%3E";
+  document.querySelectorAll("img").forEach(image => {
+    image.referrerPolicy = "no-referrer";
+    image.addEventListener("error", () => {
+      if (image.dataset.fallbackApplied) return;
+      image.dataset.fallbackApplied = "true";
+      image.classList.add("image-fallback");
+      image.src = imageFallback;
+    }, { once: true });
+  });
+
   const content = window.SHANHAI_CONTENT;
   const journalList = document.querySelector("[data-journal-list]");
   if (journalList && content) {
