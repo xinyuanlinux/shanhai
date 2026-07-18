@@ -84,7 +84,9 @@
       context.setTransform(ratio, 0, 0, ratio, 0, 0);
       stars = Array.from({ length: Math.max(24, Math.floor(rect.width / 16)) }, () => ({ x: Math.random() * rect.width, y: Math.random() * rect.height, size: Math.random() * 1.4 + 0.4, opacity: Math.random() * 0.6 + 0.2 }));
     };
+    let starMapRunning = true;
     const draw = () => {
+      if (!starMapRunning) return;
       const rect = canvas.getBoundingClientRect();
       context.clearRect(0, 0, rect.width, rect.height);
       stars.forEach(star => {
@@ -100,6 +102,7 @@
       requestAnimationFrame(draw);
     };
     setup(); draw(); addEventListener("resize", setup);
+    document.addEventListener("visibilitychange", () => { starMapRunning = !document.hidden; if (starMapRunning) draw(); });
     canvas.addEventListener("pointermove", event => {
       const rect = canvas.getBoundingClientRect();
       pointer = { x: event.clientX - rect.left, y: event.clientY - rect.top };
@@ -124,6 +127,13 @@
       : '<span class="article-nav-empty"><small>' + label + '</small><strong>暂时没有了</strong></span>';
     articleNav.innerHTML = makeLink(content.articles[current - 1], "上一篇") + makeLink(content.articles[current + 1], "下一篇");
   }
+
+  const toTop = document.createElement("button");
+  toTop.type = "button"; toTop.className = "to-top"; toTop.textContent = "↑"; toTop.setAttribute("aria-label", "返回页面顶部");
+  document.body.append(toTop);
+  const toggleTop = () => toTop.classList.toggle("is-visible", scrollY > 520);
+  addEventListener("scroll", toggleTop, { passive: true }); toggleTop();
+  toTop.addEventListener("click", () => scrollTo({ top: 0, behavior: reducedMotion ? "auto" : "smooth" }));
 
   document.querySelectorAll("a[href^='#']").forEach(link => {
     link.addEventListener("click", event => {
