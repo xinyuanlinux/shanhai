@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+  <title id="title">山海夜色</title><desc id="desc">深夜中的层叠山峰与月光</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#26364a"/><stop offset=".55" stop-color="#141a29"/><stop offset="1" stop-color="#090d14"/></linearGradient>
+    <linearGradient id="mist" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#b6cdc8" stop-opacity=".35"/><stop offset="1" stop-color="#cfb078" stop-opacity=".1"/></linearGradient>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#sky)"/>
+  <circle cx="1190" cy="210" r="105" fill="#f1e8cf" opacity=".88"/>
+  <g fill="#111824"><path d="M0 720L280 388l190 205 236-350 240 320 188-186 466 360v263H0z"/><path d="M0 790l303-211 180 143 226-195 220 174 212-122 459 231v190H0z" fill="#182231"/></g>
+  <path d="M0 820c280-94 510 25 800-35 260-53 480 24 800-49v264H0z" fill="url(#mist)"/>
+  <g fill="#fff" opacity=".7"><circle cx="203" cy="145" r="2"/><circle cx="406" cy="277" r="1.5"/><circle cx="608" cy="98" r="2"/><circle cx="847" cy="166" r="1.5"/><circle cx="1039" cy="83" r="2"/><circle cx="1390" cy="320" r="1.4"/></g>
+</svg>
