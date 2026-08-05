@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0a0a1a">
+<meta name="description" content="从零搭建山海的思考过程——关于框架选择、玻璃拟态与手工建站的理由。">
+<meta property="og:type" content="article"><meta property="og:title" content="从零搭建「山海」· 山海"><meta property="og:description" content="为什么不用框架？为什么选这个风格？写给好奇的人。"><meta property="og:locale" content="zh_CN">
+<link rel="stylesheet" href="../assets/styles.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650;700;750;800&display=swap" rel="stylesheet">
+<title>从零搭建「山海」 · 山海</title>
+<style>
+.article-page { width: min(760px, calc(100% - 48px)); margin: 0 auto; padding: 80px 0 100px; }
+.article-page h1 { font-size: clamp(2.2rem, 4.5vw, 3.6rem); font-weight: 750; letter-spacing: -.04em; line-height: 1.15; margin-bottom: 14px; }
+.article-page .date { color: var(--accent); font-size: .78rem; font-weight: 600; letter-spacing: .04em; margin-bottom: 32px; }
+.article-page .body { font-size: 1.02rem; line-height: 1.9; color: var(--text-soft); }
+.article-page .body p { margin-bottom: 1.6em; }
+.article-page .body h2 { font-size: 1.35rem; color: var(--text); margin: 2em 0 .6em; }
+.article-page .body blockquote { margin: 1.8em 0; padding: 20px 24px; border-left: 3px solid var(--accent); background: rgba(124,111,247,.06); border-radius: 0 8px 8px 0; color: var(--text); font-style: italic; }
+.article-back { display: inline-flex; align-items: center; gap: 6px; color: var(--text-muted); text-decoration: none; font-size: .84rem; margin-top: 60px; transition: color .2s; }
+.article-back:hover { color: var(--accent2); }
+</style>
+</head><body><a class="skip-link" href="#article">跳到正文</a>
+<header class="site-header"><a class="brand" href="../">SHANHAI</a><nav class="site-nav"><a href="../">主页</a><a href="https://github.com/xinyuanlinux" target="_blank" rel="noreferrer">GitHub ↗</a></nav></header>
+<main class="article-page" id="article" tabindex="-1">
+  <p class="date">2026.08.05 · 技术</p>
+  <h1>从零搭建「山海」：关于手工建站的思考</h1>
+  <article class="body">
+    <p>这个网站没有任何框架。没有 React，没有 Vue（虽然我日常写 Vue），没有 Next.js，甚至连一个构建工具都没有。它就是两个 HTML 文件、一个 CSS 文件、一个 JS 文件。</p>
+    <p>你可能会问：都 2026 年了，还写纯静态？</p>
+    <h2>为什么不用框架</h2>
+    <p>框架解决的是"规模化开发"的问题——多人协作、组件复用、状态管理、按需加载。但对一个个人网站来说，这些问题不存在。我是唯一的开发者，页面不超过十个，状态复杂度为零。</p>
+    <p>在这种情况下，框架带来的不是便利，而是代价：构建时间、依赖地狱、升级心智负担。而手工写每一行，意味着我对页面上每一个像素都有完全的控制权。</p>
+    <h2>为什么选玻璃拟态</h2>
+    <p>玻璃拟态（Glassmorphism）有几个特性特别适合个人网站：层次感强、色彩表现力好、视觉上"有深度但不沉重"。它让信息卡片像悬浮在空间中一样——这正好契合我想传达的感觉：轻盈、专业、有温度。</p>
+    <blockquote>好的设计不是让人"哇"一下，而是让人想多看一会儿。</blockquote>
+    <h2>接下来做什么</h2>
+    <p>这个网站会持续迭代。计划中的内容：技术笔记、项目展示、一个更完善的博客系统。但核心原则不会变——每一个像素都经过思考，每一次提交都在让这个地方更像"自己的空间"。</p>
+  </article>
+  <a class="article-back" href="../">← 回到主页</a>
+</main>
+<footer class="wrap site-footer"><span>© 2026 山海 · 久歌山海</span><span>Hand-crafted with care</span></footer>
+</body></html>

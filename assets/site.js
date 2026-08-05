@@ -2,16 +2,7 @@
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   document.documentElement.classList.add("js");
 
-  const progress = document.querySelector("[data-progress]");
-  if (progress) {
-    const setProgress = () => {
-      const max = document.documentElement.scrollHeight - innerHeight;
-      progress.style.transform = "scaleX(" + (max > 0 ? scrollY / max : 0) + ")";
-    };
-    addEventListener("scroll", setProgress, { passive: true });
-    setProgress();
-  }
-
+  /* ---- reveal on scroll ---- */
   const revealItems = document.querySelectorAll("[data-reveal]");
   if (!reducedMotion && "IntersectionObserver" in window) {
     const observer = new IntersectionObserver(entries => {
@@ -21,139 +12,99 @@
           observer.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.12 });
+    }, { threshold: 0.08 });
     revealItems.forEach(item => observer.observe(item));
   } else {
     revealItems.forEach(item => item.classList.add("is-visible"));
   }
 
-  const date = document.querySelector("[data-local-date]");
-  if (date) {
-    const renderDate = () => {
-      date.textContent = new Intl.DateTimeFormat("zh-CN", { month: "long", day: "numeric", weekday: "long", hour: "2-digit", minute: "2-digit", hour12: false }).format(new Date());
-    };
-    renderDate();
-    setInterval(renderDate, 30000);
-  }
-
-  const notes = ["慢一点也没关系，重要的是还在向喜欢的方向靠近。", "把一个普通的下午过得认真，也是一种能力。", "未来不必急着被看见，先让今天好好发生。", "愿你拥有在喧闹里安静、在安静里明亮的能力。"];
-  const note = document.querySelector("[data-note]");
-  const noteButton = document.querySelector("[data-note-button]");
-  if (note && noteButton) {
-    let index = 0;
-    noteButton.addEventListener("click", () => {
-      index = (index + 1) % notes.length;
-      note.textContent = "“" + notes[index] + "”";
-    });
-  }
-
-  const music = document.querySelector("[data-music-player]");
-  if (music) {
-    const audio = music.querySelector("audio");
-    const button = music.querySelector("button");
-    const label = music.querySelector("[data-music-label]");
-    button.addEventListener("click", async () => {
-      try {
-        if (audio.paused) {
-          await audio.play();
-          button.textContent = "暂停";
-          label.textContent = "正在播放 · Ambient";
-          music.classList.add("is-playing");
-        } else audio.pause();
-      } catch {
-        label.textContent = "音源暂不可用，请稍后重试";
-      }
-    });
-    audio.addEventListener("pause", () => {
-      button.textContent = "播放";
-      if (!audio.ended) label.textContent = "Ambient · Raspberrymusic";
-      music.classList.remove("is-playing");
-    });
-  }
-
-  const canvas = document.querySelector("[data-stars]");
-  if (canvas && !reducedMotion) {
-    const context = canvas.getContext("2d");
-    let stars = [];
-    let pointer = { x: -999, y: -999 };
-    const setup = () => {
-      const rect = canvas.getBoundingClientRect();
-      const ratio = devicePixelRatio || 1;
-      canvas.width = rect.width * ratio;
-      canvas.height = rect.height * ratio;
-      context.setTransform(ratio, 0, 0, ratio, 0, 0);
-      stars = Array.from({ length: Math.max(24, Math.floor(rect.width / 16)) }, () => ({ x: Math.random() * rect.width, y: Math.random() * rect.height, size: Math.random() * 1.4 + 0.4, opacity: Math.random() * 0.6 + 0.2 }));
-    };
-    let starMapRunning = true;
-    const draw = () => {
-      if (!starMapRunning) return;
-      const rect = canvas.getBoundingClientRect();
-      context.clearRect(0, 0, rect.width, rect.height);
-      stars.forEach(star => {
-        const distance = Math.hypot(star.x - pointer.x, star.y - pointer.y);
-        if (distance < 130) {
-          context.beginPath(); context.moveTo(star.x, star.y); context.lineTo(pointer.x, pointer.y);
-          context.strokeStyle = "rgba(201,172,126," + ((1 - distance / 130) * 0.3) + ")";
-          context.lineWidth = 0.7; context.stroke();
-        }
-        context.beginPath(); context.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-        context.fillStyle = "rgba(240,239,231," + star.opacity + ")"; context.fill();
-      });
-      requestAnimationFrame(draw);
-    };
-    setup(); draw(); addEventListener("resize", setup);
-    document.addEventListener("visibilitychange", () => { starMapRunning = !document.hidden; if (starMapRunning) draw(); });
-    canvas.addEventListener("pointermove", event => {
-      const rect = canvas.getBoundingClientRect();
-      pointer = { x: event.clientX - rect.left, y: event.clientY - rect.top };
-    });
-    canvas.addEventListener("pointerleave", () => pointer = { x: -999, y: -999 });
-  }
-
-  const imageFallback = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 800'%3E%3Cdefs%3E%3ClinearGradient id='sky' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop stop-color='%231b2637'/%3E%3Cstop offset='1' stop-color='%23090c13'/%3E%3C/linearGradient%3E%3ClinearGradient id='mist' x1='0' y1='0' x2='1' y2='0'%3E%3Cstop stop-color='%23b8d1cf' stop-opacity='.36'/%3E%3Cstop offset='1' stop-color='%23cfb078' stop-opacity='.12'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='1200' height='800' fill='url(%23sky)'/%3E%3Ccircle cx='875' cy='192' r='82' fill='%23f1e7c8' opacity='.82'/%3E%3Cpath d='M0 570L220 350l152 151 175-245 181 231 166-135 306 218v230H0z' fill='%23101722'/%3E%3Cpath d='M0 626l258-157 146 108 181-143 185 150 184-83 246 144v155H0z' fill='%23161d2b'/%3E%3Cpath d='M0 667c247-80 446 19 659-29 212-47 369 24 541-38v200H0z' fill='url(%23mist)'/%3E%3C/svg%3E";
-  document.querySelectorAll("img").forEach(image => {
-    image.referrerPolicy = "no-referrer";
-    image.addEventListener("error", () => {
-      if (image.dataset.fallbackApplied) return;
-      image.dataset.fallbackApplied = "true";
-      image.classList.add("image-fallback");
-      image.src = imageFallback;
-    }, { once: true });
-  });
-
-  const content = window.SHANHAI_CONTENT;
-  const journalList = document.querySelector("[data-journal-list]");
-  if (journalList && content) {
-    journalList.innerHTML = content.articles.map(article =>
-      '<article class="journal-item" data-reveal><p class="eyebrow">' + article.category + ' · ' + article.date + '</p><h2><a href="./posts/' + article.path + '">' + article.title + '</a></h2><p>' + article.excerpt + '</p><a class="text-link" href="./posts/' + article.path + '">阅读全文 <span>→</span></a></article>'
-    ).join("");
-    journalList.querySelectorAll("[data-reveal]").forEach(item => item.classList.add("is-visible"));
-  }
-
-  const articleNav = document.querySelector("[data-article-nav]");
-  if (articleNav && content) {
-    const current = content.articles.findIndex(article => article.slug === articleNav.dataset.articleNav);
-    const makeLink = (article, label) => article
-      ? '<a href="./' + article.path + '"><small>' + label + '</small><strong>' + article.title + '</strong></a>'
-      : '<span class="article-nav-empty"><small>' + label + '</small><strong>暂时没有了</strong></span>';
-    articleNav.innerHTML = makeLink(content.articles[current - 1], "上一篇") + makeLink(content.articles[current + 1], "下一篇");
-  }
-
-  const toTop = document.createElement("button");
-  toTop.type = "button"; toTop.className = "to-top"; toTop.textContent = "↑"; toTop.setAttribute("aria-label", "返回页面顶部");
-  document.body.append(toTop);
-  const toggleTop = () => toTop.classList.toggle("is-visible", scrollY > 520);
-  addEventListener("scroll", toggleTop, { passive: true }); toggleTop();
-  toTop.addEventListener("click", () => scrollTo({ top: 0, behavior: reducedMotion ? "auto" : "smooth" }));
-
+  /* ---- smooth hash scroll ---- */
   document.querySelectorAll("a[href^='#']").forEach(link => {
     link.addEventListener("click", event => {
       const target = document.querySelector(link.getAttribute("href"));
       if (target) {
         event.preventDefault();
-        target.focus({ preventScroll: true });
         target.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "start" });
       }
     });
   });
+
+  /* ---- back to top ---- */
+  const toTop = document.createElement("button");
+  toTop.type = "button"; toTop.className = "to-top"; toTop.textContent = "↑"; toTop.setAttribute("aria-label", "返回页面顶部");
+  document.body.append(toTop);
+  const toggleTop = () => toTop.classList.toggle("is-visible", scrollY > 600);
+  addEventListener("scroll", toggleTop, { passive: true }); toggleTop();
+  toTop.addEventListener("click", () => scrollTo({ top: 0, behavior: reducedMotion ? "auto" : "smooth" }));
+
+  /* ---- particle canvas ---- */
+  const canvas = document.querySelector("[data-particles]");
+  if (canvas && !reducedMotion) {
+    const ctx = canvas.getContext("2d");
+    let particles = [];
+    let animating = true;
+
+    const resize = () => {
+      const rect = canvas.parentElement.getBoundingClientRect();
+      const ratio = devicePixelRatio || 1;
+      canvas.width = rect.width * ratio;
+      canvas.height = Math.min(rect.height, 500) * ratio;
+      canvas.style.width = rect.width + "px";
+      canvas.style.height = Math.min(rect.height, 500) + "px";
+      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+    };
+
+    const init = () => {
+      resize();
+      const w = canvas.width / (devicePixelRatio || 1);
+      const h = canvas.height / (devicePixelRatio || 1);
+      particles = Array.from({ length: 40 }, () => ({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        vx: (Math.random() - .5) * .4,
+        vy: (Math.random() - .5) * .4,
+        r: Math.random() * 1.6 + .4,
+        o: Math.random() * .5 + .2
+      }));
+    };
+
+    const draw = () => {
+      if (!animating) return;
+      const w = canvas.width / (devicePixelRatio || 1);
+      const h = canvas.height / (devicePixelRatio || 1);
+      ctx.clearRect(0, 0, w, h);
+      particles.forEach(p => {
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0) p.x = w;
+        if (p.x > w) p.x = 0;
+        if (p.y < 0) p.y = h;
+        if (p.y > h) p.y = 0;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(124,111,247," + p.o + ")";
+        ctx.fill();
+      });
+
+      // draw connections
+      particles.forEach((a, i) => {
+        particles.slice(i + 1).forEach(b => {
+          const d = Math.hypot(a.x - b.x, a.y - b.y);
+          if (d < 120) {
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.strokeStyle = "rgba(124,111,247," + ((1 - d / 120) * .15) + ")";
+            ctx.lineWidth = .5;
+            ctx.stroke();
+          }
+        });
+      });
+
+      requestAnimationFrame(draw);
+    };
+
+    init(); draw();
+    addEventListener("resize", init);
+    document.addEventListener("visibilitychange", () => { animating = !document.hidden; if (animating) draw(); });
+  }
 })();
